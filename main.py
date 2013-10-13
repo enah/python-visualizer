@@ -8,6 +8,20 @@ import json
 import tempfile
 import argparse
 
+try:
+    import secret
+except:
+    # Generate secret key
+    import string
+    from random import choice
+    chars = string.letters + string.digits
+    key = ''.join([choice(chars) for i in range(50)])
+    s = "key = '{}'\n".format(key)
+    f = open("secret.py", 'w')
+    f.write(s)
+    f.close()
+    import secret
+
 app = Flask(__name__)
 
 EXAMPLE = """# Try this simple example
@@ -36,18 +50,23 @@ def home():
 
 @app.route("/visualize", methods=['POST'])
 def visualize():
+
     try:
-        code = request.files['code_file']
+        request_file = request.files['code_file']
         # TODO: implement file-size checker, this one doesn't work in flask
         # if code.size > 1024*1024:
         #     flash("file size limit exceeded :(")
         #     return redirect("/")
 
-        code = code.read()
-    except Exception as e:
+        if request_file.filename != "":
+            code = request_file.read()
+        else:
+            code = None
+    except:
         code = None
 
     if code is None:
+        print request.form['code']
         code = request.form.get('code', None)
 
     if not code:
@@ -103,10 +122,11 @@ def main():
     parser.add_argument('-p', '--production', action="store_true")
     args = parser.parse_args()
     PROD = args.production
+    app.secret_key = secret.key
     if PROD:
         app.run(host="0.0.0.0", port=80)
     else:
-        app.run(debug=True)
+        app.run(debug=True, port = 8000)
 
 if __name__ == '__main__':
     main()
