@@ -10,8 +10,7 @@ import argparse
 
 app = Flask(__name__)
 
-EXAMPLE = """
-# Try this simple example
+EXAMPLE = """# Try this simple example
 def memo(f):
     cache = dict()
     def wrapped(*args):
@@ -30,29 +29,30 @@ def fibo(n):
 print fibo(10)
 """
 
-@app.route("/", methods=['GET', 'POST'])
+@app.route("/", methods=['GET'])
 def home():
-    example = json.dumps(EXAMPLE)
+    return render_template("upload.html",example=json.dumps(EXAMPLE))
 
-    upload_template = "python_flow_visualizer_upload.html"
 
+@app.route("/visualize", methods=['POST'])
+def visualize():
     try:
         code = request.files['code_file']
-        if code.size > 1024*1024:
-            return render(upload_template,
-                          errors=["file size limit exceeded :("],
-                          example=example)
+        # TODO: implement file-size checker, this one doesn't work in flask
+        # if code.size > 1024*1024:
+        #     flash("file size limit exceeded :(")
+        #     return redirect("/")
+
         code = code.read()
-    except:
+    except Exception as e:
         code = None
 
     if code is None:
         code = request.form.get('code', None)
 
     if not code:
-        return render_template(upload_template,
-                               errors=["no code found."],
-                               example=example)
+        flash("no code found")
+        return redirect("/")
 
     data = dict()
 
@@ -60,9 +60,9 @@ def home():
     if len(result)<=1:
         result = "your code doesn't seem too short to be interesting!"
     if type(result) == str:
-        return render_template(upload_template,
-                               errors=[result],
-                               code=json.dumps(code))
+        flash(result)
+        return redirect("/")
+
     data['branches'], data['stats'] = result
 
     data['code'] = [None,] + code.split('\n')
@@ -77,7 +77,7 @@ def home():
     reports = dict()
 
     for report in raw_reports:
-        regex = re.compile(r'^[^:]+:(\d+): \[([-\w]+),([^\]]*)] (.*)$',re.i)
+        regex = re.compile(r'^[^:]+:(\d+): \[([-\w]+),([^\]]*)] (.*)$',re.I)
         r = regex.match(report)
         if r is None:
             continue
@@ -95,7 +95,7 @@ def home():
 
     json_data = json.dumps(data)
 
-    return render_template("python_flow_visualizer.html",
+    return render_template("visualizer.html",
                            data=json_data)
 
 def main():
