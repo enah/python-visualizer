@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<title>{% block title %}{% endblock %}</title>
+	<link rel="stylesheet" type="text/css" href="/static/css/base.css">
+	{% block css %}{% endblock %}
+
+	<script type="text/javascript" src="/static/js/minified-web.js"></script>
+	<script type="text/javascript" src="/static/js/angular.min.js"></script>
+	<script type="text/javascript" src="/static/js/app.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	{% block js %}{% endblock %}
+</head>
+
+<body>
+	{% block content %}{% endblock %}
+</body>
+
+</html>

@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block title %}
+Python Flow Visualizer
+{% endblock %}
+
+{% block css %}
+<style>
+	body {
+		margin: 0px;
+	}
+	.node {
+		font: sans-serif;
+        fill: black;
+	}
+	.node text.normal {
+	    fill: black;
+	}
+	.node text.active {
+	    fill: blue;
+	}
+	.node text.source {
+	    fill: red;
+	}
+	.node text.target {
+	    fill: orange;
+	}
+
+	.node text {
+		stroke-width: 0.5px;
+	}
+
+	.link {
+		stroke: #4DA6FE;
+		stroke-opacity: .3;
+		fill: none;
+	}
+	.link.source {
+	    stroke: orange;
+	    stroke-opacity: .9;
+	}
+	.link.target {
+	    stroke: red;
+	    stroke-opacity: .7;
+	}
+
+	.code-section{
+		padding-top: 8px;
+		padding-left: 3px;
+		width:530px;
+		height:100%;
+		font-family:monaco,monospace;
+		font-size:12px;
+		overflow-y:scroll;
+		overflow-x:hidden;
+		position: fixed;
+		right: 0px;
+		top: 0px;
+		background-color:rgba(240,240,240,0.8);
+		z-index: 1000;
+		box-shadow: 1px 1px 4px 4px rgba(0,0,0,0.07);
+	}
+
+	.line-num{
+		color: #555;
+		margin-right: 1px;
+	}
+	.line-num-warn{
+		margin-right: 1px;
+	}
+
+	.help-btn{
+		position: absolute;
+		width: 22px;
+		height: 22px;
+		overflow-y: hidden;
+		overflow-x: hidden;
+		white-space: normal;
+		color: white;
+		background: url("/static/img/opacity80.png");
+		transition: width 0.5s, height 0.5s;
+		-webkit-transition: width: 0.5s, height 0.5s;
+		padding-left:6px;
+		padding-top:2px;
+		box-sizing: border-box;
+		font-size: 16px;
+	}
+	.help-btn:hover{
+		width: 200px;
+		height: 330px;
+	}
+</style>
+<link href="/static/css/d3.slider.css" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript" src="/static/js/code.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="nowrap" style="position:relative;" ng-controller="VisualizerController">
+  <div class="help-btn">
+    ?
+    <div style="height:15px"></div>
+    The lines of the code are graphed by connections. Two lines of code are <span class="blue">connected</span> if one jumps to another during execution.
+    <div style="height:8px"></div>
+    Mouseover a line of code and the lines in <span class="orange">orange</span> indicate branching <span class="orange">to</span>, and <span class="red">red</span> indicates branching <span class="red">from</span>. Additionally, code is highlighted <span class="green">green</span> by how connected it is.
+    <div style="height:8px"></div>
+    Drag the slider around to see the graph at different points in execution!
+  </div>
+  <div class="inline-block text-center" style="margin-top:-20">
+    <div id="slider" style="margin:10px 10px -40px 50px;font-size:15px;line-height:10px;background-color:#fff">{[{timePassed|msTime}]}</div>
+    <div class="inline-block" style="height:730px;width:730px" id="graph">
+    </div>
+  </div>
+  <div class="code-section inline-block" onscroll="S.scrollHandle(this, false)" id="code-section" onmouseover="document.body.style.overflow='hidden';" onmouseout="document.body.style.overflow='auto';" ng-cloak>
+    <div class="code-line" ng-repeat="line in data.code" ng-hide="$index==0" ng-style="lineStyle($index)">
+      <span class="line-num" ng-hide="data.warnings[$index]">{[{$index|pad:lineNumDigits}]}:</span>
+      <a class="line-num-warn pointer" ng-show="data.warnings[$index]" ng-mouseover="mouseover[$index]=true" ng-mouseout="mouseover[$index]=false">{[{$index|pad:lineNumDigits}]}:</a>
+      <span ng-class="{'orange':data.warnings[$index]}" ng-hide="mouseover[$index]" style="white-space:pre" ng-mouseover="hoverHandle($index)" ng-mouseout="hoverHandleOut($index)">{[{line|linefilter}]}</span>
+      <span class="red" ng-show="mouseover[$index]">{[{data.warnings[$index].message}]}</span>
+    </div>
+  </div>
+</div>
+<script src="/static/js/d3.v3.min.js"></script>
+<script src="/static/js/d3.slider.js"></script>
+<script src="/static/js/render.js"></script>
+<script type="text/javascript">
+var data = {{ data|safe }}
+</script>
+{% endblock %}

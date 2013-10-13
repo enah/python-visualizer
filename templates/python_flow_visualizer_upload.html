@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}
+Python Flow Visualizer
+{% endblock %}
+
+{% block css %}
+<style>
+body {
+    margin:0px;
+}
+.upload-div{
+    position: relative;
+    width: 150px;
+    height: 30px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.uploader{
+    opacity: 0;
+    width: 150px;
+    height: 30px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    background-color: black;
+    z-index: 1000;
+}
+.upload-btn{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 150px;
+    height: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom:0px;
+    font-size: 15px;
+    background-image: linear-gradient(#fff, #eee);
+    background: -webkit-linear-gradient(#fff, #eee);
+    cursor: pointer;
+    z-index: 500;
+}
+.upload-div:hover .upload-btn,
+.uploader:hover .upload-btn,
+.upload-btn:hover{
+    background-image: none;
+    background-color: #eee;
+}
+.visualize-btn{
+    height: 38px;
+    width: 300px;
+    margin-bottom: 12px
+}
+.visualize-btn{
+    background-image: linear-gradient(rgb(71,107,183), rgb(53,80,147));
+    background: -webkit-linear-gradient(rgb(71,107,183), rgb(53,80,147));
+    color: white;
+}
+.visualize-btn:hover{
+    background-image: none;
+    background-color: rgb(53,80,147);
+}
+</style>
+{% endblock %}
+
+{% block js %}
+{% endblock %}
+
+{% block content %}
+<div class="text-center" style="background-image:url('/static/img/header_python.png');width:100%;position:absolute; top:0px;height:82px;box-shadow: 1px 1px 4px 2px rgba(0,0,0,0.15);">
+	<h1 class="text-shadow no-decor" style="padding-top:20px">Python Program Flow Visualizer</h1>
+</div>
+<form id="upload_form" action="/" method="post" enctype="multipart/form-data" style="margin-top:105px">
+  <div class="text-center relative">
+        <div class="upload-div">
+            <input type="file" class="uploader" accept="text" name="code_file" onchange="updateText(this)">
+            <button type="button" id="upload-btn" class="upload-btn">Upload Code</button>
+        </div>
+        <h2 class="text-shadow" style="opacity:0.6; margin:3px">▼</h2>
+        <button class="visualize-btn">Visualize!</button>
+        {% for error in errors %}
+        <h5 class="red">{{error}}</h5>
+        {% endfor %}
+        <h5 style="margin-top:12px;margin-bottom:7px;">Or paste/edit code</h5>
+    </div>
+    <div class="center box-shadow" style="width:700px;height:300px;font-family:monospace;padding:0px;" onclick="c.clear()">
+        <textarea id="codeBox" name="code" style="visibility:hidden"></textarea>
+    </div>
+    <div class="text-center gray">&nbsp;<br><h6>Built with <a href="http://www.djangoproject.com/">Django</a>, <a href="http://d3js.org/">D3</a>, and <a href="http://angularjs.org/">AngularJS</a> @ Facebook NorCal Hackathon 2013</h6><br></div>
+</form>
+<script src="/static/js/codemirror.js"></script>
+<link rel="stylesheet" href="/static/css/codemirror.css">
+<script src="/static/js/python.js"></script>
+<script type="text/javascript">
+    var c = CodeMirror.fromTextArea(document.getElementById("codeBox"), {
+        lineNumbers: true,
+        indentUnit: 4,
+        extraKeys: {
+            Tab: function(cm) {
+                var spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
+                cm.replaceSelection(spaces, "end", "+input");
+            }
+        }
+    });
+    c.setValue({% if code %}{{code|safe}}{% else %}{{example|safe}}{% endif %});
+    c.clear = function(){};
+    {% if False %}
+    c.clear = function(){c.setValue(""); c.clear=function(){}}
+    {% endif %}
+
+    updateText = function(input){
+        ele = document.getElementById('upload-btn');
+        ele.innerHTML = input.files[0].name;
+    }
+</script>
+{% endblock %}

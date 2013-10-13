@@ -1,0 +1,126 @@
+html, body{
+	height:100%;
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+}
+h1,.h1,h2,.h2,h3,.h3,h4,.h4,h5,.h5,h6,.h6 {
+	margin: 0px;
+	padding: 0px;
+}
+table, td{
+	border-width: 0px;
+}
+td {
+	padding-right: 5px;
+}
+a,
+a:visited,
+a:hover,
+.red {
+	color: #FE4D4D;
+}
+.blue {
+	color: #4DA6FE;
+}
+.green {
+	color: #4DFEA6;
+}
+.orange {
+	color: #FF9900;
+}
+.gray,
+.gray a,
+.gray a:visited,
+.gray a:hover{
+	color: #aaa;
+}
+
+.absolute {
+	position: absolute;
+}
+.relative {
+	position: relative;
+}
+
+/* FONTS and TEXT */
+.bold {
+	font-weight: 500;
+	font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+}
+.italic {
+	font-style: italic;
+	font-weight: 300;
+}
+a:hover,
+.underline {
+	text-decoration: underline;
+}
+a,
+.no-decor {
+	text-decoration: none;
+	font-style: normal;
+	font-weight: normal;
+}
+
+.center {
+	margin-left: auto;
+	margin-right: auto;
+}
+.text-center {
+	text-align: center;
+}
+.nowrap {
+	white-space: nowrap;
+}
+.float-left{
+	float: left;
+}
+.inline-block{
+	display: inline-block;
+}
+
+.box-shadow {
+	box-shadow: 1px 1px 3px 3px rgba(0,0,0,0.2);
+}
+.text-shadow {
+	text-shadow: 1px 1px 1px #aaa;
+}
+
+h3, .h3 {
+	font-weight: 500;
+	font-size: 23px;
+}
+h4, .h4 {
+	font-weight: 500;
+	font-size: 19px;
+}
+h5, .h5 {
+	font-weight: 400;
+	font-size: 15px;
+}
+h6, .h6 {
+	font-weight: 400;
+	font-size: 11px;
+}
+
+
+
+/* INPUT ELEMENTS */
+.searchBox {
+	border-radius: 3px;
+}
+button {
+	border-radius: 5px;
+	border-width: 1px;
+	background-color: transparent;
+	cursor: pointer;
+	font-size: 20px;
+}
+button:focus{
+	outline: none;
+}
+.pointer {
+	cursor: pointer;
+}
+
+
+
