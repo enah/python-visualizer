@@ -66,7 +66,6 @@ def visualize():
         code = None
 
     if code is None:
-        print request.form['code']
         code = request.form.get('code', None)
 
     if not code:
