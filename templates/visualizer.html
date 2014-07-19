@@ -77,7 +77,7 @@ Python Flow Visualizer
 		overflow-x: hidden;
 		white-space: normal;
 		color: white;
-		background: url("/static/img/opacity80.png");
+		background: url("static/img/opacity80.png");
 		transition: width 0.5s, height 0.5s;
 		-webkit-transition: width: 0.5s, height 0.5s;
 		padding-left:6px;
@@ -90,11 +90,11 @@ Python Flow Visualizer
 		height: 330px;
 	}
 </style>
-<link href="/static/css/d3.slider.css" rel="stylesheet" type="text/css">
+<link href="static/css/d3.slider.css" rel="stylesheet" type="text/css">
 {% endblock %}
 
 {% block js %}
-<script type="text/javascript" src="/static/js/code.js"></script>
+<script type="text/javascript" src="static/js/code.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -122,9 +122,9 @@ Python Flow Visualizer
     </div>
   </div>
 </div>
-<script src="/static/js/d3.v3.min.js"></script>
-<script src="/static/js/d3.slider.js"></script>
-<script src="/static/js/render.js"></script>
+<script src="static/js/d3.v3.min.js"></script>
+<script src="static/js/d3.slider.js"></script>
+<script src="static/js/render.js"></script>
 <script type="text/javascript">
 var data = {{ data|safe }}
 </script>
