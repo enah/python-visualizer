@@ -47,7 +47,7 @@ class BranchFinder(bdb.Bdb):
             start = time.time()
             self.run(script_str)
             run_time = time.time() - start
-        except Exception, e: # catch all exceptions, and reraise them with more web-friendly message
+        except Exception as e: # catch all exceptions, and reraise them with more web-friendly message
             # Janky janky way to get exception name. Please don't break?
             name = str(type(e)).split("'")[1]
             name = name.split(".")[-1]
@@ -65,4 +65,4 @@ def exec_script_str(script_str):
 
 if __name__ == '__main__':
     with open(sys.argv[1]) as f:
-        print exec_script_str(f.read())
+        print(exec_script_str(f.read()))

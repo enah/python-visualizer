@@ -14,7 +14,7 @@ except:
     # Generate secret key
     import string
     from random import choice
-    chars = string.letters + string.digits
+    chars = string.ascii_letters + string.digits
     key = ''.join([choice(chars) for i in range(50)])
     s = "key = '{}'\n".format(key)
     f = open("secret.py", 'w')
@@ -40,7 +40,7 @@ def fibo(n):
     if n == 1:
         return 1
     return fibo(n-1) + fibo(n-2)
-print fibo(10)
+print(fibo(10))
 """
 
 @app.route("/", methods=['GET'])
@@ -85,7 +85,7 @@ def visualize():
 
     data['code'] = [None,] + code.split('\n')
 
-    with tempfile.NamedTemporaryFile() as f:
+    with tempfile.NamedTemporaryFile('w') as f:
         f.write(code)
         f.seek(0)
         out, err = epylint.py_run(f.name, True)
@@ -125,7 +125,7 @@ def main():
     if PROD:
         app.run(host="0.0.0.0", port=80)
     else:
-        app.run(debug=True, port = 8000)
+        app.run(debug=True, port = 8080)
 
 if __name__ == '__main__':
     main()
